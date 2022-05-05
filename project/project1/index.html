@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Divya Jagadeesh" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>Project 1</title>
+  <meta name="generator" content="Hugo 0.98.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/post/">BLOG</a></li>
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="/resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/project/project1/">Project 1</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         January 1, 0001 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="exploring-game-trends-in-nba-seasons" class="section level1">
+<h1>Exploring Game Trends in NBA Seasons</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p><em>In these datasets, I explored the statistical trends of two different NBA seasons before the All-Star break. The All-Star break is a week-long bye week for all 30 teams in the league and is commonly used demarcate the two halves of the season. Since the NBA season is so long — lasting from October to April with playoffs in May and June — and each team plays 82 games, the All-Star break is a helpful way to organize storylines, trends, and general statistics. In this project, I used the pre-All Star statistics from the <a href="https://www.nba.com/stats/teams/traditional/?sort=PTS&amp;dir=-1&amp;Season=2020-21&amp;SeasonType=Regular%20Season&amp;SeasonSegment=Pre%20All-Star">2020-2021</a> and <a href="https://www.nba.com/stats/teams/traditional/?sort=PTS&amp;dir=-1&amp;Season=2021-22&amp;SeasonType=Regular%20Season&amp;SeasonSegment=Pre%20All-Star">2021-2022</a> seasons. Both of these datasets were found on <a href="https://www.nba.com">NBA.com</a> before I transferred them to Excel to import into R Studio.</em></p>
+<pre class="r"><code>library(readxl)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.6     ✓ dplyr   1.0.8
+## ✓ tidyr   1.2.0     ✓ stringr 1.4.0
+## ✓ readr   2.1.2     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>project_1_data_20_21 &lt;- read_excel(&quot;project 1 data 20-21.xlsx&quot;)
+project_1_data_21_22 &lt;- read_excel(&quot;project 1 data 21-22.xlsx&quot;)
+NBA20_21 &lt;- project_1_data_20_21
+NBA21_22 &lt;- project_1_data_21_22
+NBA20_21</code></pre>
+<pre><code>## # A tibble: 30 × 27
+##    Team              `Games Played`  Wins Losses `Win %` `Minutes Played` Points
+##    &lt;chr&gt;                      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Brooklyn Nets                 37    24     13   0.649             48.7   121.
+##  2 Milwaukee Bucks               36    22     14   0.611             48     119.
+##  3 Utah Jazz                     36    27      9   0.75              48.1   117.
+##  4 Denver Nuggets                36    21     15   0.583             48.7   116.
+##  5 New Orleans Peli…             36    15     21   0.417             48.3   116.
+##  6 Chicago Bulls                 34    16     18   0.471             48.4   115 
+##  7 LA Clippers                   38    24     14   0.632             48     115.
+##  8 Washington Wizar…             34    14     20   0.412             48.1   115.
+##  9 Sacramento Kings              36    14     22   0.389             48.1   115.
+## 10 Philadelphia 76e…             36    24     12   0.667             48.4   115.
+## # … with 20 more rows, and 20 more variables: `Field Goals Made` &lt;dbl&gt;,
+## #   `Field Goals Attempted` &lt;dbl&gt;, `Field Goal %` &lt;dbl&gt;,
+## #   `Three Points Made` &lt;dbl&gt;, `Three Points Attempted` &lt;dbl&gt;,
+## #   `Three Point %` &lt;dbl&gt;, `Free Throws Made` &lt;dbl&gt;,
+## #   `Free Throws Attempted` &lt;dbl&gt;, `Free Throw %` &lt;dbl&gt;,
+## #   `Offensive Rebounds` &lt;dbl&gt;, `Defensive Rebounds` &lt;dbl&gt;, Rebounds &lt;dbl&gt;,
+## #   Assists &lt;dbl&gt;, Turnovers &lt;dbl&gt;, Steals &lt;dbl&gt;, Blocks &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>NBA21_22</code></pre>
+<pre><code>## # A tibble: 30 × 27
+##    Team              `Games Played`  Wins Losses `Win %` `Minutes Played` Points
+##    &lt;chr&gt;                      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+##  1 LA Clippers                   61    30     31   0.492             48.2   107.
+##  2 Boston Celtics                60    34     26   0.567             48.7   109.
+##  3 Charlotte Hornets             60    29     31   0.483             48.6   114.
+##  4 Indiana Pacers                60    20     40   0.333             48.5   109.
+##  5 Memphis Grizzlies             60    41     19   0.683             48.3   114.
+##  6 Milwaukee Bucks               60    36     24   0.6               48.2   113.
+##  7 Orlando Magic                 60    13     47   0.217             48.1   103.
+##  8 Sacramento Kings              60    22     38   0.367             48.3   110.
+##  9 Brooklyn Nets                 59    31     28   0.525             48.2   111.
+## 10 Chicago Bulls                 59    38     21   0.644             48.1   113.
+## # … with 20 more rows, and 20 more variables: `Field Goals Made` &lt;dbl&gt;,
+## #   `Field Goals Attempted` &lt;dbl&gt;, `Field Goal %` &lt;dbl&gt;,
+## #   `Three Points Made` &lt;dbl&gt;, `Three Points Attempted` &lt;dbl&gt;,
+## #   `Three Point %` &lt;dbl&gt;, `Free Throws Made` &lt;dbl&gt;,
+## #   `Free Throws Attempted` &lt;dbl&gt;, `Free Throw %` &lt;dbl&gt;,
+## #   `Offensive Rebounds` &lt;dbl&gt;, `Defensive Rebounds` &lt;dbl&gt;, Rebounds &lt;dbl&gt;,
+## #   Assists &lt;dbl&gt;, Turnovers &lt;dbl&gt;, Steals &lt;dbl&gt;, Blocks &lt;dbl&gt;, …</code></pre>
+<p><em>A couple of trends I expect to see are a couple of direct relationships between variables such as <code>Field Goals Made</code>, <code>Three Point %</code>, and <code>Free Throw %</code> in relation to how many <code>Wins</code> a team has. I also look forward to seeing what notable differences there are between the two seasons with specific teams or specific conferences.</em></p>
+</div>
+<div id="merging-and-tidying" class="section level2">
+<h2>Merging and Tidying</h2>
+<pre class="r"><code>NBA20_21 %&gt;%
+  inner_join(NBA21_22, by = &quot;Team&quot;, suffix = c(&quot;.2020-2021&quot;, &quot;.2021-2022&quot;)) %&gt;%
+  pivot_longer(cols = c(&quot;Games Played.2020-2021&quot;:&quot;+/-.2021-2022&quot;)) %&gt;%
+# this bit of code allowed me to separate each statistic depending on season and team, so that I could continue tidying the dataset
+  separate(name, into = c(&quot;Statistic&quot;, &quot;Season&quot;), sep = &quot;[.]&quot;) %&gt;%
+# this line allowed me to separate each variable from the season it was reporting on
+  pivot_wider(names_from = Statistic,
+              values_from = value) -&gt; NBA_preallstar
+# I then pivoted back to having more variables, finishing my tidying
+NBA_preallstar</code></pre>
+<pre><code>## # A tibble: 60 × 28
+##    Team       Season `Games Played`  Wins Losses `Win %` `Minutes Played` Points
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Brooklyn … 2020-…             37    24     13   0.649             48.7   121.
+##  2 Brooklyn … 2021-…             59    31     28   0.525             48.2   111.
+##  3 Milwaukee… 2020-…             36    22     14   0.611             48     119.
+##  4 Milwaukee… 2021-…             60    36     24   0.6               48.2   113.
+##  5 Utah Jazz  2020-…             36    27      9   0.75              48.1   117.
+##  6 Utah Jazz  2021-…             58    36     22   0.621             48     114.
+##  7 Denver Nu… 2020-…             36    21     15   0.583             48.7   116.
+##  8 Denver Nu… 2021-…             58    33     25   0.569             48.2   110.
+##  9 New Orlea… 2020-…             36    15     21   0.417             48.3   116.
+## 10 New Orlea… 2021-…             59    23     36   0.39              48.2   106.
+## # … with 50 more rows, and 20 more variables: `Field Goals Made` &lt;dbl&gt;,
+## #   `Field Goals Attempted` &lt;dbl&gt;, `Field Goal %` &lt;dbl&gt;,
+## #   `Three Points Made` &lt;dbl&gt;, `Three Points Attempted` &lt;dbl&gt;,
+## #   `Three Point %` &lt;dbl&gt;, `Free Throws Made` &lt;dbl&gt;,
+## #   `Free Throws Attempted` &lt;dbl&gt;, `Free Throw %` &lt;dbl&gt;,
+## #   `Offensive Rebounds` &lt;dbl&gt;, `Defensive Rebounds` &lt;dbl&gt;, Rebounds &lt;dbl&gt;,
+## #   Assists &lt;dbl&gt;, Turnovers &lt;dbl&gt;, Steals &lt;dbl&gt;, Blocks &lt;dbl&gt;, …</code></pre>
+<p><em>Because both datasets were tidy separately, I first merged the two together before cleaning it up. Before merging, each dataset had 30 observations — one for each team. I used an <code>inner join</code> for merging, although I could have also used a <code>full join</code> since all 27 variables in the two datasets matched with each other. After joining the two, I had a dataset with 30 observations and 53 total columns, including team name. The increase in variables was due to adding additional columns to differentiate between the 2020-2021 and 2021-2022 seasons. From here, I used the <code>pivot longer</code> function, which created 1,560 rows. Each team here had one row per statistic per year, resulting in 53 rows per team. Cleaning this up started with using <code>separate</code> to create a column with the variables and a column with the season. From here, I could <code>pivot wider</code> to bring the variables back as their own columns, resulting in each row being one team per one season’s game statistics. This created a dataset with 60 observations named <code>NBA_preallstar</code>.</em></p>
+</div>
+<div id="data-wrangling" class="section level2">
+<h2>Data Wrangling</h2>
+<pre class="r"><code>NBAconferences &lt;- data.frame(Team = c(&quot;Brooklyn Nets&quot;,&quot;Milwaukee Bucks&quot;,&quot;Utah Jazz&quot;, &quot;Denver Nuggets&quot;, &quot;New Orleans Pelicans&quot;, &quot;Chicago Bulls&quot;,&quot;LA Clippers&quot;,&quot;Washington Wizards&quot;,&quot;Sacramento Kings&quot;,&quot;Philadelphia 76ers&quot;, &quot;Portland Trail Blazers&quot;, &quot;Phoenix Suns&quot;,&quot;Golden State Warriors&quot;,&quot;Toronto Raptors&quot;,&quot;Indiana Pacers&quot;, &quot;Charlotte Hornets&quot;, &quot;Atlanta Hawks&quot;, &quot;Dallas Mavericks&quot;,&quot;Boston Celtics&quot;,&quot;Memphis Grizzlies&quot;, &quot;LA Lakers&quot;, &quot;San Antonio Spurs&quot;, &quot;Detroit Pistons&quot;,&quot;Minnesota Timberwolves&quot;,&quot;Houston Rockets&quot;, &quot;Miami Heat&quot;,&quot;Oklahoma City Thunder&quot;,&quot;Orlando Magic&quot;,&quot;New York Knicks&quot;,&quot;Cleveland Cavaliers&quot;),
+                             Conference = c(&quot;Eastern&quot;,&quot;Eastern&quot;,&quot;Western&quot;,&quot;Western&quot;,&quot;Western&quot;,&quot;Eastern&quot;,&quot;Western&quot;,&quot;Eastern&quot;,&quot;Western&quot;,&quot;Eastern&quot;,&quot;Western&quot;,&quot;Western&quot;,&quot;Western&quot;,&quot;Eastern&quot;,&quot;Eastern&quot;,&quot;Eastern&quot;,&quot;Eastern&quot;,&quot;Western&quot;,&quot;Eastern&quot;,&quot;Western&quot;,&quot;Western&quot;,&quot;Western&quot;,&quot;Eastern&quot;,&quot;Western&quot;,&quot;Western&quot;,&quot;Eastern&quot;,&quot;Western&quot;,&quot;Eastern&quot;,&quot;Eastern&quot;,&quot;Eastern&quot;))
+NBAconferences</code></pre>
+<pre><code>##                      Team Conference
+## 1           Brooklyn Nets    Eastern
+## 2         Milwaukee Bucks    Eastern
+## 3               Utah Jazz    Western
+## 4          Denver Nuggets    Western
+## 5    New Orleans Pelicans    Western
+## 6           Chicago Bulls    Eastern
+## 7             LA Clippers    Western
+## 8      Washington Wizards    Eastern
+## 9        Sacramento Kings    Western
+## 10     Philadelphia 76ers    Eastern
+## 11 Portland Trail Blazers    Western
+## 12           Phoenix Suns    Western
+## 13  Golden State Warriors    Western
+## 14        Toronto Raptors    Eastern
+## 15         Indiana Pacers    Eastern
+## 16      Charlotte Hornets    Eastern
+## 17          Atlanta Hawks    Eastern
+## 18       Dallas Mavericks    Western
+## 19         Boston Celtics    Eastern
+## 20      Memphis Grizzlies    Western
+## 21              LA Lakers    Western
+## 22      San Antonio Spurs    Western
+## 23        Detroit Pistons    Eastern
+## 24 Minnesota Timberwolves    Western
+## 25        Houston Rockets    Western
+## 26             Miami Heat    Eastern
+## 27  Oklahoma City Thunder    Western
+## 28          Orlando Magic    Eastern
+## 29        New York Knicks    Eastern
+## 30    Cleveland Cavaliers    Eastern</code></pre>
+<pre class="r"><code># I created this data frame, so I could add it to my data and use it for additional analysis
+NBA_preallstar %&gt;%
+  mutate(Team = str_replace(Team, &quot;Los Angeles&quot;,&quot;LA&quot;)) -&gt; NBA_preallstar
+NBA_preallstar %&gt;%
+  filter(grepl(&quot;LA&quot;, Team))</code></pre>
+<pre><code>## # A tibble: 4 × 28
+##   Team        Season `Games Played`  Wins Losses `Win %` `Minutes Played` Points
+##   &lt;chr&gt;       &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+## 1 LA Clippers 2020-…             38    24     14   0.632             48     115.
+## 2 LA Clippers 2021-…             61    30     31   0.492             48.2   107.
+## 3 LA Lakers   2020-…             37    24     13   0.649             48.7   111.
+## 4 LA Lakers   2021-…             58    27     31   0.466             48.8   111.
+## # … with 20 more variables: `Field Goals Made` &lt;dbl&gt;,
+## #   `Field Goals Attempted` &lt;dbl&gt;, `Field Goal %` &lt;dbl&gt;,
+## #   `Three Points Made` &lt;dbl&gt;, `Three Points Attempted` &lt;dbl&gt;,
+## #   `Three Point %` &lt;dbl&gt;, `Free Throws Made` &lt;dbl&gt;,
+## #   `Free Throws Attempted` &lt;dbl&gt;, `Free Throw %` &lt;dbl&gt;,
+## #   `Offensive Rebounds` &lt;dbl&gt;, `Defensive Rebounds` &lt;dbl&gt;, Rebounds &lt;dbl&gt;,
+## #   Assists &lt;dbl&gt;, Turnovers &lt;dbl&gt;, Steals &lt;dbl&gt;, Blocks &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  inner_join(NBAconferences, by = &quot;Team&quot;) -&gt; NBA_preallstar
+NBA_preallstar</code></pre>
+<pre><code>## # A tibble: 60 × 29
+##    Team       Season `Games Played`  Wins Losses `Win %` `Minutes Played` Points
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Brooklyn … 2020-…             37    24     13   0.649             48.7   121.
+##  2 Brooklyn … 2021-…             59    31     28   0.525             48.2   111.
+##  3 Milwaukee… 2020-…             36    22     14   0.611             48     119.
+##  4 Milwaukee… 2021-…             60    36     24   0.6               48.2   113.
+##  5 Utah Jazz  2020-…             36    27      9   0.75              48.1   117.
+##  6 Utah Jazz  2021-…             58    36     22   0.621             48     114.
+##  7 Denver Nu… 2020-…             36    21     15   0.583             48.7   116.
+##  8 Denver Nu… 2021-…             58    33     25   0.569             48.2   110.
+##  9 New Orlea… 2020-…             36    15     21   0.417             48.3   116.
+## 10 New Orlea… 2021-…             59    23     36   0.39              48.2   106.
+## # … with 50 more rows, and 21 more variables: `Field Goals Made` &lt;dbl&gt;,
+## #   `Field Goals Attempted` &lt;dbl&gt;, `Field Goal %` &lt;dbl&gt;,
+## #   `Three Points Made` &lt;dbl&gt;, `Three Points Attempted` &lt;dbl&gt;,
+## #   `Three Point %` &lt;dbl&gt;, `Free Throws Made` &lt;dbl&gt;,
+## #   `Free Throws Attempted` &lt;dbl&gt;, `Free Throw %` &lt;dbl&gt;,
+## #   `Offensive Rebounds` &lt;dbl&gt;, `Defensive Rebounds` &lt;dbl&gt;, Rebounds &lt;dbl&gt;,
+## #   Assists &lt;dbl&gt;, Turnovers &lt;dbl&gt;, Steals &lt;dbl&gt;, Blocks &lt;dbl&gt;, …</code></pre>
+<p><em>Before starting with creating summary statistics, I wanted to add which conference each team was part of. To do this, I created the data frame <code>NBAconference</code> to merge into <code>NBA_preallstar</code>. While making this data frame, I saw that the Los Angeles teams had different names, so I changed them to follow the same pattern.</em></p>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  group_by(Conference, Season) %&gt;%
+  summarize(mean(`Win %`))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Conference&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 4 × 3
+## # Groups:   Conference [2]
+##   Conference Season    `mean(\`Win %\`)`
+##   &lt;chr&gt;      &lt;chr&gt;                 &lt;dbl&gt;
+## 1 Eastern    2020-2021             0.483
+## 2 Eastern    2021-2022             0.492
+## 3 Western    2020-2021             0.516
+## 4 Western    2021-2022             0.509</code></pre>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  filter(Season == &quot;2021-2022&quot;, Conference == &quot;Western&quot;) %&gt;%
+  arrange(desc(`Games Played`))</code></pre>
+<pre><code>## # A tibble: 15 × 29
+##    Team       Season `Games Played`  Wins Losses `Win %` `Minutes Played` Points
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+##  1 LA Clippe… 2021-…             61    30     31   0.492             48.2   107.
+##  2 Sacrament… 2021-…             60    22     38   0.367             48.3   110.
+##  3 Memphis G… 2021-…             60    41     19   0.683             48.3   114.
+##  4 New Orlea… 2021-…             59    23     36   0.39              48.2   106.
+##  5 Portland … 2021-…             59    25     34   0.424             48.1   108.
+##  6 Golden St… 2021-…             59    42     17   0.712             48.2   111.
+##  7 Dallas Ma… 2021-…             59    35     24   0.593             48.3   107.
+##  8 San Anton… 2021-…             59    23     36   0.39              48.3   112.
+##  9 Minnesota… 2021-…             59    31     28   0.525             48.3   113.
+## 10 Utah Jazz  2021-…             58    36     22   0.621             48     114.
+## 11 Denver Nu… 2021-…             58    33     25   0.569             48.2   110.
+## 12 Phoenix S… 2021-…             58    48     10   0.828             48.1   114.
+## 13 LA Lakers  2021-…             58    27     31   0.466             48.8   111.
+## 14 Houston R… 2021-…             58    15     43   0.259             48.1   108.
+## 15 Oklahoma … 2021-…             58    18     40   0.31              48.3   101.
+## # … with 21 more variables: `Field Goals Made` &lt;dbl&gt;,
+## #   `Field Goals Attempted` &lt;dbl&gt;, `Field Goal %` &lt;dbl&gt;,
+## #   `Three Points Made` &lt;dbl&gt;, `Three Points Attempted` &lt;dbl&gt;,
+## #   `Three Point %` &lt;dbl&gt;, `Free Throws Made` &lt;dbl&gt;,
+## #   `Free Throws Attempted` &lt;dbl&gt;, `Free Throw %` &lt;dbl&gt;,
+## #   `Offensive Rebounds` &lt;dbl&gt;, `Defensive Rebounds` &lt;dbl&gt;, Rebounds &lt;dbl&gt;,
+## #   Assists &lt;dbl&gt;, Turnovers &lt;dbl&gt;, Steals &lt;dbl&gt;, Blocks &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  filter(Season == &quot;2021-2022&quot;, Conference == &quot;Eastern&quot;) %&gt;%
+  arrange(desc(`Games Played`))</code></pre>
+<pre><code>## # A tibble: 15 × 29
+##    Team       Season `Games Played`  Wins Losses `Win %` `Minutes Played` Points
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Milwaukee… 2021-…             60    36     24   0.6               48.2   113.
+##  2 Indiana P… 2021-…             60    20     40   0.333             48.5   109.
+##  3 Charlotte… 2021-…             60    29     31   0.483             48.6   114.
+##  4 Boston Ce… 2021-…             60    34     26   0.567             48.7   109.
+##  5 Orlando M… 2021-…             60    13     47   0.217             48.1   103.
+##  6 Brooklyn … 2021-…             59    31     28   0.525             48.2   111.
+##  7 Chicago B… 2021-…             59    38     21   0.644             48.1   113.
+##  8 Miami Heat 2021-…             59    38     21   0.644             48.6   109.
+##  9 New York … 2021-…             59    25     34   0.424             48.3   105.
+## 10 Washingto… 2021-…             58    27     31   0.466             48.3   107.
+## 11 Philadelp… 2021-…             58    35     23   0.603             48.3   108.
+## 12 Atlanta H… 2021-…             58    28     30   0.483             48     112.
+## 13 Detroit P… 2021-…             58    13     45   0.224             48.2   103.
+## 14 Cleveland… 2021-…             58    35     23   0.603             48     107.
+## 15 Toronto R… 2021-…             57    32     25   0.561             48.4   109.
+## # … with 21 more variables: `Field Goals Made` &lt;dbl&gt;,
+## #   `Field Goals Attempted` &lt;dbl&gt;, `Field Goal %` &lt;dbl&gt;,
+## #   `Three Points Made` &lt;dbl&gt;, `Three Points Attempted` &lt;dbl&gt;,
+## #   `Three Point %` &lt;dbl&gt;, `Free Throws Made` &lt;dbl&gt;,
+## #   `Free Throws Attempted` &lt;dbl&gt;, `Free Throw %` &lt;dbl&gt;,
+## #   `Offensive Rebounds` &lt;dbl&gt;, `Defensive Rebounds` &lt;dbl&gt;, Rebounds &lt;dbl&gt;,
+## #   Assists &lt;dbl&gt;, Turnovers &lt;dbl&gt;, Steals &lt;dbl&gt;, Blocks &lt;dbl&gt;, …</code></pre>
+<p><em>I calculated the mean win percentage for each conference in each season. I found that the Western conference had a higher win percentage than the East both seasons. I then looked to see which team in each conference played the most games before the All-Star break in 2021-2022. The LA Clippers played the most in the West with 61 games, and five Eastern teams had played 60 games: the Bucks, Pacers, Hornets, and the Celtics.</em></p>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  filter(Season == &quot;2020-2021&quot;) %&gt;%
+  select(Team, `Field Goal %`, `Three Point %`, `Free Throw %`) -&gt; NBA_scorepercent
+# after creating this new data frame, I used it to find out which teams were more successful in shooting
+NBA_scorepercent %&gt;%
+  arrange(`Field Goal %`)</code></pre>
+<pre><code>## # A tibble: 30 × 4
+##    Team                   `Field Goal %` `Three Point %` `Free Throw %`
+##    &lt;chr&gt;                           &lt;dbl&gt;           &lt;dbl&gt;          &lt;dbl&gt;
+##  1 Orlando Magic                    43.2            35.6           79.1
+##  2 Minnesota Timberwolves           43.5            34.6           76.4
+##  3 Houston Rockets                  43.7            33.3           75.6
+##  4 Detroit Pistons                  44.2            35.2           77.4
+##  5 Portland Trail Blazers           44.5            38.2           82.5
+##  6 Oklahoma City Thunder            44.6            34             73.5
+##  7 Toronto Raptors                  45.3            38.3           83.2
+##  8 Atlanta Hawks                    45.4            36.2           82.2
+##  9 Cleveland Cavaliers              45.4            34.6           72.5
+## 10 New York Knicks                  45.5            37.2           77.7
+## # … with 20 more rows</code></pre>
+<pre class="r"><code>NBA_scorepercent %&gt;%
+  arrange(`Three Point %`)</code></pre>
+<pre><code>## # A tibble: 30 × 4
+##    Team                   `Field Goal %` `Three Point %` `Free Throw %`
+##    &lt;chr&gt;                           &lt;dbl&gt;           &lt;dbl&gt;          &lt;dbl&gt;
+##  1 Houston Rockets                  43.7            33.3           75.6
+##  2 Oklahoma City Thunder            44.6            34             73.5
+##  3 Washington Wizards               46              34.4           76.4
+##  4 Minnesota Timberwolves           43.5            34.6           76.4
+##  5 Cleveland Cavaliers              45.4            34.6           72.5
+##  6 Dallas Mavericks                 46.5            35             78.3
+##  7 LA Lakers                        48.1            35.1           74.5
+##  8 Detroit Pistons                  44.2            35.2           77.4
+##  9 Miami Heat                       46.2            35.3           79.5
+## 10 Memphis Grizzlies                46.4            35.5           79.3
+## # … with 20 more rows</code></pre>
+<pre class="r"><code>NBA_scorepercent %&gt;%
+  arrange(`Free Throw %`)</code></pre>
+<pre><code>## # A tibble: 30 × 4
+##    Team                   `Field Goal %` `Three Point %` `Free Throw %`
+##    &lt;chr&gt;                           &lt;dbl&gt;           &lt;dbl&gt;          &lt;dbl&gt;
+##  1 Sacramento Kings                 48              36.9           71.8
+##  2 Cleveland Cavaliers              45.4            34.6           72.5
+##  3 New Orleans Pelicans             48.4            35.9           73.2
+##  4 Milwaukee Bucks                  48.5            38.8           73.5
+##  5 Oklahoma City Thunder            44.6            34             73.5
+##  6 LA Lakers                        48.1            35.1           74.5
+##  7 Houston Rockets                  43.7            33.3           75.6
+##  8 Boston Celtics                   46.7            37.3           76.3
+##  9 Washington Wizards               46              34.4           76.4
+## 10 Minnesota Timberwolves           43.5            34.6           76.4
+## # … with 20 more rows</code></pre>
+<p><em>I also looked into the scoring percentages of all 30 teams in the 2020-2021 season. Then, I looked into which teams had the lowest percentage in each category. The Orlando Magic had the lowest <code>Field Goal %</code> at 43.2%, the Houston Rockets had the lowest <code>Three Point %</code> at 33.3%, and the Sacramento Kings had the lowest <code>Free Throw %</code> at 71.8%.</em></p>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  mutate(&quot;Average Points/Minute&quot; = Points/`Minutes Played`)</code></pre>
+<pre><code>## # A tibble: 60 × 30
+##    Team       Season `Games Played`  Wins Losses `Win %` `Minutes Played` Points
+##    &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Brooklyn … 2020-…             37    24     13   0.649             48.7   121.
+##  2 Brooklyn … 2021-…             59    31     28   0.525             48.2   111.
+##  3 Milwaukee… 2020-…             36    22     14   0.611             48     119.
+##  4 Milwaukee… 2021-…             60    36     24   0.6               48.2   113.
+##  5 Utah Jazz  2020-…             36    27      9   0.75              48.1   117.
+##  6 Utah Jazz  2021-…             58    36     22   0.621             48     114.
+##  7 Denver Nu… 2020-…             36    21     15   0.583             48.7   116.
+##  8 Denver Nu… 2021-…             58    33     25   0.569             48.2   110.
+##  9 New Orlea… 2020-…             36    15     21   0.417             48.3   116.
+## 10 New Orlea… 2021-…             59    23     36   0.39              48.2   106.
+## # … with 50 more rows, and 22 more variables: `Field Goals Made` &lt;dbl&gt;,
+## #   `Field Goals Attempted` &lt;dbl&gt;, `Field Goal %` &lt;dbl&gt;,
+## #   `Three Points Made` &lt;dbl&gt;, `Three Points Attempted` &lt;dbl&gt;,
+## #   `Three Point %` &lt;dbl&gt;, `Free Throws Made` &lt;dbl&gt;,
+## #   `Free Throws Attempted` &lt;dbl&gt;, `Free Throw %` &lt;dbl&gt;,
+## #   `Offensive Rebounds` &lt;dbl&gt;, `Defensive Rebounds` &lt;dbl&gt;, Rebounds &lt;dbl&gt;,
+## #   Assists &lt;dbl&gt;, Turnovers &lt;dbl&gt;, Steals &lt;dbl&gt;, Blocks &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  mutate(&quot;Average Points/Minute&quot; = Points/`Minutes Played`) %&gt;%
+  summarize(mean(`Average Points/Minute`))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   `mean(\`Average Points/Minute\`)`
+##                               &lt;dbl&gt;
+## 1                              2.29</code></pre>
+<p><em>I used the <code>mutate</code> function to determine how many points each team would score per minute of game time. On average, teams across both seasons scored 2.29 points/minute in a game.</em></p>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  group_by(Season) %&gt;%
+  summarize(sum(`Games Played`),sum(Wins),sum(Losses), n_distinct(Team))</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   Season    `sum(\`Games Played\`)` `sum(Wins)` `sum(Losses)` `n_distinct(Team)`
+##   &lt;chr&gt;                       &lt;dbl&gt;       &lt;dbl&gt;         &lt;dbl&gt;              &lt;int&gt;
+## 1 2020-2021                    1066         533           533                 30
+## 2 2021-2022                    1766         883           883                 30</code></pre>
+<p><em>In the 2020-2021 season, there was a sum of 1,066 total games played before the All-Star break. In 2021-2022, there was a sum of 1,766 total games. However, each game is counted twice in this sum because two teams play in one game. To figure out how many games were really played, I calculated the how many total <code>Wins</code> and <code>Losses</code> there were. This means, in 2020-2021, there were 533 games played, and in 2021-2022, there were 883 games played before the All-Star break. I also calculated how many distinct teams were in the league since each team repeats, which results in 30 distinct teams.</em></p>
+</div>
+<div id="visualizations" class="section level2">
+<h2>Visualizations</h2>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  pivot_longer(cols = c(&quot;Wins&quot;,&quot;Losses&quot;), names_to = &quot;Result&quot;, values_to = &quot;Games&quot;) %&gt;%
+# using `tidyr` functions, I was able to make `Wins` and `Losses` a categorical variable, so I could use it to differentiate in the plot
+  ggplot(aes(x = Team, y = Games, fill = Result)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  scale_fill_manual(values = c(&quot;#81968F&quot;, &quot;#96BDC6&quot;)) +
+  ggtitle(&quot;NBA Pre-All Star Break Game Records&quot;) +
+  facet_wrap(~Season) +
+  coord_flip()</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><em>This plot depicts each team’s win-loss record before the All-Star break in both seasons. As a stacked graph, the different colors for each team work to exhibit whether a team was winning or losing more before the break. In each season, all 30 teams have played a similar amount of games, but in 2020-2021, no team had played more than 40 games before the break, while in 2021-2022, all of the teams had played around 60 games. Furthermore, there are some teams in 2020-2021 that have a noticeable difference in games played (e.g. the Memphis Grizzlies), which might have been caused by multiple game cancellations due to COVID-19 outbreaks within teams.</em></p>
+<pre class="r"><code>NBA_preallstar %&gt;%
+  filter(Season == &quot;2021-2022&quot;) %&gt;%
+  ggplot(aes(x = `Win %`, color = `Field Goal %`, y = Rebounds)) +
+  geom_point(size = 3) +
+  scale_color_continuous(type = &quot;viridis&quot;) +
+  labs(title = &quot;2021-2022 Pre-All Star Break Win Percentage by Average Rebounds&quot;,
+       y = &quot;Average Rebounds per Game&quot;) + 
+# the code below was used to label only certain parts of the plot that had interesting information compared to the rest of the teams
+  geom_text(
+    data = NBA_preallstar %&gt;% filter(`Win %` &lt; 0.3 &amp; Season == &quot;2021-2022&quot;),
+    aes(label = Team),
+    size = 2.5,
+    nudge_x = .02, nudge_y = -.2,
+    color = &quot;black&quot;
+  ) +
+  geom_text(
+    data = NBA_preallstar %&gt;% filter(`Win %` &gt; 0.65 &amp; Season == &quot;2021-2022&quot; &amp; Rebounds &gt; 46),
+    aes(label = Team),
+    size = 2.5,
+    nudge_x = -.01, nudge_y = -.2,
+    color = &quot;black&quot;
+  ) +
+  geom_text(
+   data = NBA_preallstar %&gt;% filter(`Win %` &gt; 0.60 &amp; Season == &quot;2021-2022&quot; &amp; Rebounds &lt; 43),
+   aes(label = Team),
+   size = 2.5,
+   nudge_x = .02, nudge_y = -.2,
+   color = &quot;black&quot;
+  )</code></pre>
+<p><img src="/project/project1_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><em>The plot above depicts the 30 teams win percentage before the All-Star break in 2021-2022 compared to each team’s average rebounds per game (RPG). In addition, the data points are marked by the team’s field goal percentage throughout the game — the percent of made two- and three-pointers in the date range. Generally, there is a positive correlation between a team’s RPG and their winning percentage. Furthermore, teams who have a higher field goal percentage tend to win and rebound more. I labeled some teams that didn’t completely follow the trends above. First, the Magic, Pistons, and Rockets do follow the direct rebounds-win relationship, but these three teams are significantly lower than the other 27 teams. Also, while the Magic and Pistons have lower field goal percentages, the Rockets actually shot around 45% from the field. Next, the 76ers tie with the Rockets for the lowest RPG at 42.3, but the 76ers have also won around 60% of their games and shot closer to 46% from the field, staying in line with the win-field goal relationship. The Grizzlies have the highest RPG at 48.9 and score 46% from the field, which speaks to high numbers of both offensive and defensive rebounds each game, rather than on just one side of the court. Lastly, the Suns ended the first half of the season having won 83% of their games, and they have the second highest field goal percentage at 48.2%. The highest is the Bulls (the other yellow data point) who shot 48.3% from the field.</em></p>
+</div>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

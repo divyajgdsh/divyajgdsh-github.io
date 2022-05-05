@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on Divya Jagadeesh</title>
+    <link>/project/</link>
+    <description>Recent content in Projects on Divya Jagadeesh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Project 1</title>
+      <link>/project/project1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>Exploring Game Trends in NBA Seasons Introduction In these datasets, I explored the statistical trends of two different NBA seasons before the All-Star break. The All-Star break is a week-long bye week for all 30 teams in the league and is commonly used demarcate the two halves of the season. Since the NBA season is so long — lasting from October to April with playoffs in May and June — and each team plays 82 games, the All-Star break is a helpful way to organize storylines, trends, and general statistics.</description>
+    </item>
+    
+  </channel>
+</rss>

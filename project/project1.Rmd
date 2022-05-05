@@ -1,0 +1,158 @@
+---
+title: "Project 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exploring Game Trends in NBA Seasons
+
+## Introduction
+
+*In these datasets, I explored the statistical trends of two different NBA seasons before the All-Star break. The All-Star break is a week-long bye week for all 30 teams in the league and is commonly used demarcate the two halves of the season. Since the NBA season is so long — lasting from October to April with playoffs in May and June — and each team plays 82 games, the All-Star break is a helpful way to organize storylines, trends, and general statistics. In this project, I used the pre-All Star statistics from the [2020-2021](https://www.nba.com/stats/teams/traditional/?sort=PTS&dir=-1&Season=2020-21&SeasonType=Regular%20Season&SeasonSegment=Pre%20All-Star) and [2021-2022](https://www.nba.com/stats/teams/traditional/?sort=PTS&dir=-1&Season=2021-22&SeasonType=Regular%20Season&SeasonSegment=Pre%20All-Star) seasons. Both of these datasets were found on [NBA.com](https://www.nba.com) before I transferred them to Excel to import into R Studio.*
+
+```{r}
+library(readxl)
+library(tidyverse)
+project_1_data_20_21 <- read_excel("project 1 data 20-21.xlsx")
+project_1_data_21_22 <- read_excel("project 1 data 21-22.xlsx")
+NBA20_21 <- project_1_data_20_21
+NBA21_22 <- project_1_data_21_22
+NBA20_21
+NBA21_22
+```
+
+*A couple of trends I expect to see are a couple of direct relationships between variables such as `Field Goals Made`, `Three Point %`, and `Free Throw %` in relation to how many `Wins` a team has. I also look forward to seeing what notable differences there are between the two seasons with specific teams or specific conferences.*
+
+## Merging and Tidying
+
+```{r}
+NBA20_21 %>%
+  inner_join(NBA21_22, by = "Team", suffix = c(".2020-2021", ".2021-2022")) %>%
+  pivot_longer(cols = c("Games Played.2020-2021":"+/-.2021-2022")) %>%
+# this bit of code allowed me to separate each statistic depending on season and team, so that I could continue tidying the dataset
+  separate(name, into = c("Statistic", "Season"), sep = "[.]") %>%
+# this line allowed me to separate each variable from the season it was reporting on
+  pivot_wider(names_from = Statistic,
+              values_from = value) -> NBA_preallstar
+# I then pivoted back to having more variables, finishing my tidying
+NBA_preallstar
+```
+
+*Because both datasets were tidy separately, I first merged the two together before cleaning it up. Before merging, each dataset had 30 observations — one for each team. I used an `inner join` for merging, although I could have also used a `full join` since all 27 variables in the two datasets matched with each other. After joining the two, I had a dataset with 30 observations and 53 total columns, including team name. The increase in variables was due to adding additional columns to differentiate between the 2020-2021 and 2021-2022 seasons. From here, I used the `pivot longer` function, which created 1,560 rows. Each team here had one row per statistic per year, resulting in 53 rows per team. Cleaning this up started with using `separate` to create a column with the variables and a column with the season. From here, I could `pivot wider` to bring the variables back as their own columns, resulting in each row being one team per one season's game statistics. This created a dataset with 60 observations named `NBA_preallstar`.*
+
+## Data Wrangling
+
+```{r}
+NBAconferences <- data.frame(Team = c("Brooklyn Nets","Milwaukee Bucks","Utah Jazz", "Denver Nuggets", "New Orleans Pelicans", "Chicago Bulls","LA Clippers","Washington Wizards","Sacramento Kings","Philadelphia 76ers", "Portland Trail Blazers", "Phoenix Suns","Golden State Warriors","Toronto Raptors","Indiana Pacers", "Charlotte Hornets", "Atlanta Hawks", "Dallas Mavericks","Boston Celtics","Memphis Grizzlies", "LA Lakers", "San Antonio Spurs", "Detroit Pistons","Minnesota Timberwolves","Houston Rockets", "Miami Heat","Oklahoma City Thunder","Orlando Magic","New York Knicks","Cleveland Cavaliers"),
+                             Conference = c("Eastern","Eastern","Western","Western","Western","Eastern","Western","Eastern","Western","Eastern","Western","Western","Western","Eastern","Eastern","Eastern","Eastern","Western","Eastern","Western","Western","Western","Eastern","Western","Western","Eastern","Western","Eastern","Eastern","Eastern"))
+NBAconferences
+# I created this data frame, so I could add it to my data and use it for additional analysis
+NBA_preallstar %>%
+  mutate(Team = str_replace(Team, "Los Angeles","LA")) -> NBA_preallstar
+NBA_preallstar %>%
+  filter(grepl("LA", Team))
+NBA_preallstar %>%
+  inner_join(NBAconferences, by = "Team") -> NBA_preallstar
+NBA_preallstar
+```
+
+*Before starting with creating summary statistics, I wanted to add which conference each team was part of. To do this, I created the data frame `NBAconference` to merge into `NBA_preallstar`. While making this data frame, I saw that the Los Angeles teams had different names, so I changed them to follow the same pattern.*
+
+```{r}
+NBA_preallstar %>%
+  group_by(Conference, Season) %>%
+  summarize(mean(`Win %`))
+NBA_preallstar %>%
+  filter(Season == "2021-2022", Conference == "Western") %>%
+  arrange(desc(`Games Played`))
+NBA_preallstar %>%
+  filter(Season == "2021-2022", Conference == "Eastern") %>%
+  arrange(desc(`Games Played`))
+```
+
+*I calculated the mean win percentage for each conference in each season. I found that the Western conference had a higher win percentage than the East both seasons. I then looked to see which team in each conference played the most games before the All-Star break in 2021-2022. The LA Clippers played the most in the West with 61 games, and five Eastern teams had played 60 games: the Bucks, Pacers, Hornets, and the Celtics.*
+
+```{r}
+NBA_preallstar %>%
+  filter(Season == "2020-2021") %>%
+  select(Team, `Field Goal %`, `Three Point %`, `Free Throw %`) -> NBA_scorepercent
+# after creating this new data frame, I used it to find out which teams were more successful in shooting
+NBA_scorepercent %>%
+  arrange(`Field Goal %`)
+NBA_scorepercent %>%
+  arrange(`Three Point %`)
+NBA_scorepercent %>%
+  arrange(`Free Throw %`)
+```
+
+*I also looked into the scoring percentages of all 30 teams in the 2020-2021 season. Then, I looked into which teams had the lowest percentage in each category. The Orlando Magic had the lowest `Field Goal %` at 43.2%, the Houston Rockets had the lowest `Three Point %` at 33.3%, and the Sacramento Kings had the lowest `Free Throw %` at 71.8%.*
+
+```{r}
+NBA_preallstar %>%
+  mutate("Average Points/Minute" = Points/`Minutes Played`)
+NBA_preallstar %>%
+  mutate("Average Points/Minute" = Points/`Minutes Played`) %>%
+  summarize(mean(`Average Points/Minute`))
+```
+
+*I used the `mutate` function to determine how many points each team would score per minute of game time. On average, teams across both seasons scored 2.29 points/minute in a game.*
+
+```{r}
+NBA_preallstar %>%
+  group_by(Season) %>%
+  summarize(sum(`Games Played`),sum(Wins),sum(Losses), n_distinct(Team))
+```
+*In the 2020-2021 season, there was a sum of 1,066 total games played before the All-Star break. In 2021-2022, there was a sum of 1,766 total games. However, each game is counted twice in this sum because two teams play in one game. To figure out how many games were really played, I calculated the how many total `Wins` and `Losses` there were. This means, in 2020-2021, there were 533 games played, and in 2021-2022, there were 883 games played before the All-Star break. I also calculated how many distinct teams were in the league since each team repeats, which results in 30 distinct teams.*
+
+## Visualizations
+
+```{r}
+NBA_preallstar %>%
+  pivot_longer(cols = c("Wins","Losses"), names_to = "Result", values_to = "Games") %>%
+# using `tidyr` functions, I was able to make `Wins` and `Losses` a categorical variable, so I could use it to differentiate in the plot
+  ggplot(aes(x = Team, y = Games, fill = Result)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c("#81968F", "#96BDC6")) +
+  ggtitle("NBA Pre-All Star Break Game Records") +
+  facet_wrap(~Season) +
+  coord_flip()
+```
+
+*This plot depicts each team's win-loss record before the All-Star break in both seasons. As a stacked graph, the different colors for each team work to exhibit whether a team was winning or losing more before the break. In each season, all 30 teams have played a similar amount of games, but in 2020-2021, no team had played more than 40 games before the break, while in 2021-2022, all of the teams had played around 60 games. Furthermore, there are some teams in 2020-2021 that have a noticeable difference in games played (e.g. the Memphis Grizzlies), which might have been caused by multiple game cancellations due to COVID-19 outbreaks within teams.*
+
+```{r}
+NBA_preallstar %>%
+  filter(Season == "2021-2022") %>%
+  ggplot(aes(x = `Win %`, color = `Field Goal %`, y = Rebounds)) +
+  geom_point(size = 3) +
+  scale_color_continuous(type = "viridis") +
+  labs(title = "2021-2022 Pre-All Star Break Win Percentage by Average Rebounds",
+       y = "Average Rebounds per Game") + 
+# the code below was used to label only certain parts of the plot that had interesting information compared to the rest of the teams
+  geom_text(
+    data = NBA_preallstar %>% filter(`Win %` < 0.3 & Season == "2021-2022"),
+    aes(label = Team),
+    size = 2.5,
+    nudge_x = .02, nudge_y = -.2,
+    color = "black"
+  ) +
+  geom_text(
+    data = NBA_preallstar %>% filter(`Win %` > 0.65 & Season == "2021-2022" & Rebounds > 46),
+    aes(label = Team),
+    size = 2.5,
+    nudge_x = -.01, nudge_y = -.2,
+    color = "black"
+  ) +
+  geom_text(
+   data = NBA_preallstar %>% filter(`Win %` > 0.60 & Season == "2021-2022" & Rebounds < 43),
+   aes(label = Team),
+   size = 2.5,
+   nudge_x = .02, nudge_y = -.2,
+   color = "black"
+  )
+```
+
+*The plot above depicts the 30 teams win percentage before the All-Star break in 2021-2022 compared to each team's average rebounds per game (RPG). In addition, the data points are marked by the team's field goal percentage throughout the game — the percent of made two- and three-pointers in the date range. Generally, there is a positive correlation between a team's RPG and their winning percentage. Furthermore, teams who have a higher field goal percentage tend to win and rebound more. I labeled some teams that didn't completely follow the trends above. First, the Magic, Pistons, and Rockets do follow the direct rebounds-win relationship, but these three teams are significantly lower than the other 27 teams. Also, while the Magic and Pistons have lower field goal percentages, the Rockets actually shot around 45% from the field. Next, the 76ers tie with the Rockets for the lowest RPG at 42.3, but the 76ers have also won around 60% of their games and shot closer to 46% from the field, staying in line with the win-field goal relationship. The Grizzlies have the highest RPG at 48.9 and score 46% from the field, which speaks to high numbers of both offensive and defensive rebounds each game, rather than on just one side of the court. Lastly, the Suns ended the first half of the season having won 83% of their games, and they have the second highest field goal percentage at 48.2%. The highest is the Bulls (the other yellow data point) who shot 48.3% from the field.*
